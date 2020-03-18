@@ -6,3 +6,4 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'mqtt', '~> 0.5.0'
 gem 'rb-inotify', '~> 0.10.1'
+gem 'filewatcher', '~> 1.1.1'
