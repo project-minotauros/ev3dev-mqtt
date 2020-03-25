@@ -1,5 +1,5 @@
 module Ev3dev
-  class LegoSensor
+  class Sensor
     PATH = "/sys/class/lego-sensor/sensor"
 
     lookup_files :address, :bin_data, :bin_data_format, :commands, :decimals, :direct, :driver_name, :fw_version, :modes, :num_values, :poll_ms, :text_value, :units, read: true

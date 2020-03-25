@@ -1,5 +1,5 @@
 module Ev3dev
-  class LegoPort < Device
+  class Port < Device
     PATH = "/sys/class/lego-port/port"
 
     lookup_files :address, :driver_name, :modes, :status, read: true
