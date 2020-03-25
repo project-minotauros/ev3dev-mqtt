@@ -7,18 +7,14 @@ module Ev3dev
     end
 
     def self.lookup_files *files, read: false, write: false
-      files.each do |f|
+      files.each do |file|
         if read
-          define_method f do
-            file = File.join device_path, f.to_s
-            raise ArgumentError unless File.exist? file
+          define_method file do
             read(file)
           end
         end
         if write
-          define_method "#{f}=" do |value|
-            file = File.join device_path, f.to_s
-            raise ArgumentError unless File.exist? file
+          define_method "#{file}=" do |value|
             write(file, value: value)
           end
         end
