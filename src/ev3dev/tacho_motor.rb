@@ -1,5 +1,5 @@
 module Ev3dev
-  class TachoMotor
+  class TachoMotor < Device
     PATH = "/sys/class/tacho-motor/motor"
 
     lookup_files :address, :commands, :count_per_rot, :driver_name, :duty_cycle, :max_speed, :position, :speed, :state, :stop_actions, read: true
