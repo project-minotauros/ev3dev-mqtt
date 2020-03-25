@@ -8,7 +8,7 @@ module Ev3dev
     def initialize(side, color)
       raise ArgumentError unless [0, 1].include? side
       raise ArgumentError unless %w(red green).include? color
-      super PATH + "led#{size}\:#{color}\:brick-status/"
+      super PATH + "led#{side}\:#{color}\:brick-status/"
     end
   end
 end
