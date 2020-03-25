@@ -10,14 +10,14 @@ module Ev3dev
       files.each do |f|
         if read
           define_method f do
-            file = File.join device_path, f
+            file = File.join device_path, f.to_s
             raise ArgumentError unless File.exist? file
             read(file)
           end
         end
         if write
           define_method "#{f}=" do |value|
-            file = File.join device_path, f
+            file = File.join device_path, f.to_s
             raise ArgumentError unless File.exist? file
             write(file, value: value)
           end
