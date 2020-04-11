@@ -6,11 +6,15 @@ module Ev3dev
       @device_path = path
     end
 
-    def self.lookup_files *files, read: false, write: false
+    def self.lookup_files *files, read: false, write: false, read_once: false
       files.each do |file|
         if read
           define_method file do
             read(file)
+          end
+        elsif read_once
+          define_method file do
+            instance_variable_get("@#{file}") || instance_variable_set("@#{file}", read(file))
           end
         end
         if write
