@@ -2,7 +2,7 @@ module Ev3dev
   class Led < Device
     PATH = "/sys/class/leds/"
 
-    lookup_files :max_brightness, :trigger, read: true
+    lookup_files :max_brightness, :trigger, read_once: true
     lookup_files :brightness, read: true, write: true
 
     def initialize(side, color)
