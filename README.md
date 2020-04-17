@@ -1,2 +1,2 @@
-# ev3dev-mqtt
+# ev3dev-server
 This repository is WIP.
