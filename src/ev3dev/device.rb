@@ -29,7 +29,7 @@ module Ev3dev
       def setup_autoscan path
         singleton_class.send(:define_method, "autoscan") do
           Dir.entries(path).drop(2).map do |entry|
-            self.class.new entry
+            self.new entry
           end
         end
       end
