@@ -25,6 +25,16 @@ module Ev3dev
       end
     end
 
+    class << self
+      def setup_autoscan path
+        singleton_class.send(:define_method, "autoscan") do
+          Dir.entries(path).drop(2).map do |entry|
+            self.class.new entry
+          end
+        end
+      end
+    end
+
     def write(file, value:)
       file = File.join @device_path, file.to_s
       raise "No such file #{file}" unless File.exist? file
