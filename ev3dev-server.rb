@@ -4,7 +4,7 @@ require 'bundler/setup'
 require_relative 'src/websocket/server'
 
 puts "Initializin..."
-server = WebSocket::Server.new
+server = WebSocket::Server.new host: '0.0.0.0'
 
 puts "Ready to accept requests"
 
