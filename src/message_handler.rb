@@ -15,7 +15,7 @@ class MessageHandler
 
   def decode message
     header = message[0].codepoints
-    payload = Marshar.load(message[1..])
+    payload = Marshal.load(message[1..])
     command = header & (7 << 11)
     subcommand = header & (7 << 8)
     device_type = header & (15 << 4)
