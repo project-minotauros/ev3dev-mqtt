@@ -6,7 +6,7 @@ require 'rubygems'
 require 'bundler/setup'
 
 require_relative 'src/websocket/server'
-require_relative 'stc/message_handler'
+require_relative 'src/message_handler'
 
 puts "Initializing..."
 server = WebSocket::Server.new host: '0.0.0.0'
