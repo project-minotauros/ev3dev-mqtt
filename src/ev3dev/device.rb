@@ -22,7 +22,7 @@ module Ev3dev
             read(file)
           end
         elsif read_once
-          @read_once_files << file.to_sym
+          @read_once_files.append(file.to_sym)
           define_method file do
             instance_variable_get("@#{file}") || instance_variable_set("@#{file}", read(file))
           end
