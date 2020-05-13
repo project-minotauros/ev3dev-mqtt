@@ -34,7 +34,7 @@ module Ev3dev
             end
           end
         end
-        define_read_onces(read_once_files)
+        define_read_onces(read_once_files) unless read_once_files.empty?
       end
     end
 
