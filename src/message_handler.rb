@@ -1,4 +1,5 @@
 require_relative 'common'
+require_relative 'ev3dev'
 
 class MessageHandler
   def initialize connection
