@@ -10,12 +10,12 @@ class MessageHandler
     @sensors = Ev3dev::Sensor.autoscan
     @tmotors = Ev3dev::TachoMotor.autoscan
 
-    @connection.send(response_available_devices(AvailableDeivices::NONE))
+    @connection.send(response_available_devices(AvailableDevices::NONE))
   end
 
   def decode message
     header = message[0].codepoints
-    payload = Marshal.load(message[1..])
+    payload = Marshal.load(message[1..message.length])
     command = header & (7 << 11)
     subcommand = header & (7 << 8)
     device_type = header & (15 << 4)
