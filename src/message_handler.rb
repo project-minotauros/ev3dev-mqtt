@@ -16,11 +16,11 @@ class MessageHandler
 
   def decode message
     header = message[0].codepoints
-    payload = Marshal.load(message[1..message.length])
-    command = header & (7 << 11)
-    subcommand = header & (7 << 8)
-    device_type = header & (15 << 4)
-    device_id = header & (15)
+    payload = message[1..message.length]
+    command = (header >> 10) & 15
+    subcommand = (header >> 7) & 7
+    device_type = (header >> 3) & 15
+    device_id = (header >> 0) & 7
   end
 
   def encode response, device_type, device_id, payload
