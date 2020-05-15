@@ -28,7 +28,7 @@ class MessageHandler
     message |= device_type << 3
     message |= device_id
     message = message.chr("UTF-8")
-    message + Marshal.dump(payload)
+    message + Marshal.dump(payload).force_encoding(Encoding::UTF_8)
   end
 
 private
