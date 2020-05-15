@@ -21,6 +21,16 @@ class MessageHandler
     subcommand = (header >> 7) & 7
     device_type = (header >> 3) & 15
     device_id = (header >> 0) & 7
+    case command
+    when InboundFlags::EXECUTE_COMMAND
+      Thread.new (payload) do |command|
+        @connection.send(encode(OutboundFlags::CONSOLE_OUTPUT, 0, 0, `#{command}`))
+      end
+    when InboundFlags::SCAN_DEVICES
+      Thread.new (device_type) do |device|
+        @connection.send(response_available_devices(device))
+      end
+    end
   end
 
   def encode response, device_type, device_id, payload
