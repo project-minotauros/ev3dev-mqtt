@@ -19,7 +19,6 @@ loop do
     handler = MessageHandler.new connection
     while (message = connection.receive)
       puts "Received #{message}"
-      connection.send("Received #{message}...")
       handler.decode message
     end
   end
