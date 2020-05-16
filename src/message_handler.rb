@@ -1,9 +1,12 @@
 require_relative 'common'
 require_relative 'ev3dev'
+require_relative 'info_updater'
 
 class MessageHandler
   def initialize connection
     @connection = connection
+
+    @info_updater = InfoUpdater.new
 
     @ports = Ev3dev::Port.autoscan
     @leds = Ev3dev::Led.autoscan
@@ -27,9 +30,7 @@ class MessageHandler
         @connection.send(encode(OutboundFlags::CONSOLE_OUTPUT, 0, 0, `#{command}`))
       end
     when InboundFlags::SCAN_DEVICES
-      Thread.new (device_type) do |device|
-        @connection.send(response_available_devices(device))
-      end
+      @connection.send(response_available_devices(device))
     end
   end
 
