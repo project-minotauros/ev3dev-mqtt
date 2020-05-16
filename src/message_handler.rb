@@ -15,8 +15,8 @@ class MessageHandler
   end
 
   def decode message
-    header = message[0].codepoints
-    payload = message[1..message.length]
+    header = Integer(message[0...message.index('P')])
+    payload = message[(message.index('P') + 1)..message.length]
     command = (header >> 10) & 15
     subcommand = (header >> 7) & 7
     device_type = (header >> 3) & 15
@@ -37,8 +37,7 @@ class MessageHandler
     message = response << 7
     message |= device_type << 3
     message |= device_id
-    message = message.chr("UTF-8")
-    message + Marshal.dump(payload).force_encoding(Encoding::UTF_8)
+    "#{message}P" + Marshal.dump(payload).force_encoding(Encoding::UTF_8)
   end
 
 private
