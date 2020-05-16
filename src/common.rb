@@ -9,6 +9,19 @@ module AvailableDevices
   TMOTOR  = 7
   DMOTOR  = 8
   SMOTOR  = 9
+
+  LOOKUP = {
+    AvailableDevices::NONE => "none",
+    AvailableDevices::DISPLAY => "display",
+    AvailableDevices::SOUND => "sound",
+    AvailableDevices::PORT => "ports",
+    AvailableDevices::LED => "leds",
+    AvailableDevices::BATTERY => "battery",
+    AvailableDevices::SENSOR => "sensors",
+    AvailableDevices::TMOTOR => "tmotors",
+    AvailableDevices::DMOTOR => "dmotors",
+    AvailableDevices::SMOTOR => "smotors"
+  }
 end
 
 module InboundFlags
