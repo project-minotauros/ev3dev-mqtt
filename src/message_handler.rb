@@ -35,6 +35,7 @@ class MessageHandler
     when InboundFlags::DATA_RW
       read_write_data subcommand, device_type, device_id, payload
     when InboundFlags::REQUEST_UPDATE
+      request_update subcommand, device_type, device_id
     end
   end
 
@@ -74,6 +75,79 @@ private
       rw_thread.abort_on_exception = true
     rescue Exception => e
       @connection.send(error_message("On read-write operation: #{e}"))
+    end
+  end
+
+  def request_update command, device_type, device_id
+    case command
+    when InboundFlags::Internal::REMOVE
+      stop_updates_for device_type, device_id
+    when InboundFlags::Internal::READ
+      start_updates_for device_type, device_id
+    end
+  end
+
+  def start_updates_for device_type, device_id
+    device_name = AvailableDevices::LOOKUP[device_type]
+    updater = -> { return nil }
+    case device_type
+    when AvailableDevices::PORT
+      updater = -> {
+        return {
+          status: @ports[device_id].status
+        }
+      }
+    when AvailableDevices::LED
+      updater = -> {
+        return {
+          brightness: @leds[device_id].brightness
+        }
+      }
+    when AvailableDevices::BATTERY
+      updater = -> {
+        return {
+          current_now: @battery.current_now,
+          voltage_now: @battery.voltage_now
+        }
+      }
+    when AvailableDevices::SENSOR
+      updater = -> {
+        return {
+          units: @sensors[device_id].units,
+          values: @sensors[device_id].values
+        }
+      }
+    when AvailableDevices::TMOTOR
+      updater = -> {
+        return {
+          duty_cycle: @tmotors[device_id].duty_cycle,
+          polarity: @tmotors[device_id].polarity,
+          position: @tmotors[device_id].position,
+          speed: @tmotors[device_id].speed,
+          state: @tmotors[device_id].state
+        }
+      }
+    when AvailableDevices::DISPLAY
+      return
+    end
+    begin
+      @info_updater.update(device_type, device_id) do
+        @connection.send(encode(OutboundFlags::UPDATE_INFO, 0, device_type, device_id, updater.call))
+      end
+    rescue Exception => e
+      @connection.send(error_message("On starting #{device_name} updates: #{e}"))
+    end
+  end
+
+  def stop_updates_for device_type, device_id
+    device_name = AvailableDevices::LOOKUP[device_type]
+    begin
+      t = Thread.new do
+        @info_updater.stop(device_type, device_id)
+      end
+      t.abort_on_exception = true
+    rescue Exception => e
+      @connection.send(error_message("On stopping #{device_name} updates: #{e}"))
     end
   end
 
