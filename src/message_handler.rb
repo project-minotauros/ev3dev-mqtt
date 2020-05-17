@@ -30,7 +30,11 @@ class MessageHandler
         @connection.send(encode(OutboundFlags::CONSOLE_OUTPUT, 0, 0, `#{command}`))
       end
     when InboundFlags::SCAN_DEVICES
+      @info_updater.stop_all
       @connection.send(response_available_devices(device))
+    when InboundFlags::DATA_RW
+      read_write_data subcommand, device_type, device_id, payload
+    when InboundFlags::REQUEST_UPDATE
     end
   end
 
@@ -51,5 +55,33 @@ private
       sensors: @sensors.map { |sensor| sensor.read_once_attributes },
       tmotors: @tmotors.map { |tmotor| tmotor.read_once_attributes }
     })
+  end
+
+  def read_write_data operation, device_type, device_id, data
+    device_name = AvailableDevices::LOOKUP[device_type]
+    begin
+      rw_thread = Thread.new do
+        case operation
+        when InboundFlags::Internal::READ
+          @connection.send(output_message("[READ - #{device_name} => #{device_id}] #{instance_variable_get("@#{device_name}")[device_id].send(data)}"))
+        when InboundFlags::Internal::WRITE
+          method, value = data.split(',').map(&:trim)
+          instance_variable_get("@#{device_name}")[device_id].send("#{method}=", value)
+        else
+          raise "Wrong operation type"
+        end
+      end
+      rw_thread.abort_on_exception = true
+    rescue Exception => e
+      @connection.send(error_message("On read-write operation: #{e}"))
+    end
+  end
+
+  def error_message message
+    encode(OutboundFlags::CONSOLE_ERROR, 0, 0, message)
+  end
+
+  def output_message message
+    encode(OutboundFlags::CONSOLE_OUTPUT, 0, 0, message)
   end
 end
