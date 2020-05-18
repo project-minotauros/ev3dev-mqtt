@@ -16,7 +16,7 @@ class InfoUpdater
     when AvailableDevices::SOUND, AvailableDevices::DISPLAY, AvailableDevices::SMOTOR, AvailableDevices::DMOTOR
       raise "Not implemented"
     when AvailableDevices::BATTERY
-      @battery = Thread.new (block) { |exec| loop { exec.call } }
+      @battery_thread = Thread.new (block) { |exec| loop { exec.call } }
     else
       instance_variable_get("@#{AvailableDevices::LOOKUP[device_type]}_thread")[device_id] = Thread.new (block) { |exec| loop { exec.call } }
     end
