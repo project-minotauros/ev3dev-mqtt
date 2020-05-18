@@ -132,7 +132,7 @@ private
     end
     begin
       @info_updater.update(device_type, device_id) do
-        @connection.send(encode(OutboundFlags::UPDATE_INFO, 0, device_type, device_id, updater.call))
+        @connection.send(encode(OutboundFlags::UPDATE_INFO, device_type, device_id, updater.call))
       end
     rescue Exception => e
       @connection.send(error_message("On starting #{device_name} updates: #{e}"))
