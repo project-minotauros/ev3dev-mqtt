@@ -11,7 +11,7 @@ class InfoUpdater
 
   def update device_type, device_id, &block
     case device_type
-    when AvailbaleDevices::NONE
+    when AvailableDevices::NONE
       raise "Can't start device none"
     when AvailableDevices::SOUND, AvailableDevices::DISPLAY, AvailableDevices::SMOTOR, AvailableDevices::DMOTOR
       raise "Not implemented"
@@ -25,7 +25,7 @@ class InfoUpdater
 
   def stop device_type, device_id
     case device_type
-    when AvailbaleDevices::NONE
+    when AvailableDevices::NONE
       raise "Can't stop device none"
     when AvailableDevices::SOUND, AvailableDevices::DISPLAY, AvailableDevices::SMOTOR, AvailableDevices::DMOTOR
       raise "Not implemented"
